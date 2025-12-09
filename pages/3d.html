@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TAO/OAT Rotatie (Ondersteboven)</title>
+  <style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .main-container {
+      perspective: 1000px;
+      height: 200vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      gap: 100px;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+    }
+
+    /* STYLING VOOR DE INDIVIDUELE LETTERS */
+    .letter-svg {
+      width: 100px; 
+      height: 100px;
+      margin: 10px 0; 
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      transform-origin: center center;
+    }
+
+    /* Statische rotatie voor de letters in de tweede kolom */
+    .column-rotated .letter-svg {
+        /* AANGEPAST NAAR -90 graden voor de ondersteboven oriëntatie */
+        transform: rotate(-90deg); 
+    }
+
+    .letter-group {
+        fill: #333; 
+        stroke: none; 
+    }
+
+    .o-hole {
+        fill: #f0f0f0; 
+    }
+
+  </style>
+</head>
+<body>
+  <div class="main-container">
+
+    <div class="column column-standard">
+      <svg class="letter-svg T-1" viewBox="0 0 100 100">
+        <g class="letter-group T"><path d="M 20 20 L 80 20 L 80 35 L 58 35 L 58 80 L 42 80 L 42 35 L 20 35 Z" /></g>
+      </svg>
+      <svg class="letter-svg A-1" viewBox="0 0 100 100">
+        <g class="letter-group A"><path d="M 40 20 L 60 20 L 85 80 L 65 80 L 50 40 L 35 80 L 15 80 Z" /></g>
+      </svg>
+      <svg class="letter-svg O-1" viewBox="0 0 100 100">
+        <g class="letter-group O"><circle cx="50" cy="50" r="30" /><circle class="o-hole" cx="50" cy="50" r="15" /></g>
+      </svg>
+    </div>
+
+    <div class="column column-rotated">
+      <svg class="letter-svg O-2" viewBox="0 0 100 100">
+        <g class="letter-group O"><circle cx="50" cy="50" r="30" /><circle class="o-hole" cx="50" cy="50" r="15" /></g>
+      </svg>
+      <svg class="letter-svg A-2" viewBox="0 0 100 100">
+        <g class="letter-group A"><path d="M 40 20 L 60 20 L 85 80 L 65 80 L 50 40 L 35 80 L 15 80 Z" /></g>
+      </svg>
+      <svg class="letter-svg T-2" viewBox="0 0 100 100">
+        <g class="letter-group T"><path d="M 20 20 L 80 20 L 80 35 L 58 35 L 58 80 L 42 80 L 42 35 L 20 35 Z" /></g>
+      </svg>
+    </div>
+
+  </div>
+<script>
+    const lettersStandard = document.querySelectorAll('.column-standard .letter-svg');
+    const lettersRotated = document.querySelectorAll('.column-rotated .letter-svg');
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const scrollFraction = scrollTop / maxScroll;
+      
+      const rotationY = scrollFraction * 720; 
+
+      // 1. Standaard kolom (alleen 3D rotatie)
+      lettersStandard.forEach(letter => {
+        letter.style.transform = `rotateY(${rotationY}deg)`; 
+      });
+
+      // 2. Gedraaide kolom (-90 graden start rotatie + 3D rotatie)
+      lettersRotated.forEach(letter => {
+        // AANGEPAST NAAR -90 graden!
+        letter.style.transform = `rotate(-90deg) rotateY(${rotationY}deg)`; 
+      });
+    });
+  </script>
+</body>
+</html>
+
