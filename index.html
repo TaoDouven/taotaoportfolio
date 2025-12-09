@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Zorgt voor scrollruimte voor de animatie */
+    body {
+        min-height: 200vh;
+    }
+
+    /* CONTAINER DIE DE WELKOMTEKST, TAO EN FOTO OMVAT */
+    .introductie {
+        display: flex;
+        justify-content: center; 
+        align-items: center;
+        flex-wrap: wrap; 
+        gap: 40px; /* Kleinere standaard gap voor mobiel */
+        padding: 40px 20px;
+    }
+
+    /* CONTAINER SPECIFIEK VOOR DE TWEE LETTERKOLOMMEN */
+    .tao-animation-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* STANDAARD (MOBIELE) AFSTAND: */
+        gap: 40px; 
+        perspective: 1000px; 
+    }
+
+    .tao-column {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+    }
+
+    /* STANDAARD STYLING VOOR DE INDIVIDUELE LETTERS (VOOR KLEINSTE SCHERMEN) */
+    .letter-svg {
+      /* KLEINE MAAT VOOR MOBIEL (< 20em) */
+      width: 100px; 
+      height: 100px;
+      margin: 10px 0; 
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      transform-origin: center center;
+    }
+
+    /* Statische rotatie: -90 graden draait de al ondersteboven gedefinieerde letters op hun kant */
+    .column-rotated .letter-svg {
+        transform: rotate(-90deg); 
+    }
+
+    .letter-group {
+        fill: #333; 
+        stroke: none; 
+    }
+
+    .o-hole {
+        /* Pas deze kleur aan als de achtergrond van de body anders is dan #f0f0f0 */
+        fill: #f0f0f0; 
+    }
+
+    /* Stijl de welkomstsectie zodat hij naast de letters past */
+    .welcome-text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* STANDAARD MAAT PROFIELFOTO */
+    .introductie .prof {
+        max-width: 200px; 
+    }
+
+    /* ==================================================== */
+    /* RESPONSIVE STYLES VOOR TAO ANIMATIE */
+    /* ==================================================== */
+
+    /* 1. SMALL MOBILE (>= 20em / 320px) */
+    @media screen and (min-width: 20em) {
+        .letter-svg {
+            width: 150px; 
+            height: 150px;
+            margin: 15px 0; 
+        }
+        .introductie .prof {
+            max-width: 250px;
+        }
+    }
+
+    /* 2. TABLET (>= 48em / 768px) */
+    @media screen and (min-width: 48em) {
+        .introductie {
+            gap: 60px;
+        }
+        .tao-animation-wrapper {
+            /* Grotere gap tussen TAO en OAT */
+            gap: 80px; 
+        }
+        .letter-svg {
+            /* Medium formaat voor tablet */
+            width: 280px; 
+            height: 280px;
+            margin: 30px 0; 
+        }
+        .introductie .prof {
+            max-width: 350px;
+        }
+    }
+
+    /* 3. DESKTOP (>= 62em / 992px) */
+    @media screen and (min-width: 62em) {
+        .introductie {
+            gap: 80px;
+        }
+        .tao-animation-wrapper {
+            /* GROOT FORMAAT: Originele desktop afstand */
+            gap: 150px; 
+        }
+        .letter-svg {
+          /* GIGANTISCH VERGROOT: Originele desktop maat */
+          width: 400px; 
+          height: 400px;
+          margin: 40px 0; 
+        }
+        .introductie .prof {
+            max-width: 400px; 
+        }
+    }
+
+    /* ---------------------------------------------------- */
+    /* MUIS SCROLL INDICATOR STIJLEN */
+    /* ---------------------------------------------------- */
+    .mouse-scroll-indicator {
+        position: fixed; 
+        bottom: 40px;    
+        /* AANGEPAST: Plaatsing rechts */
+        right: 40px;     
+        left: unset;     
+        transform: none; 
+        z-index: 1000;
+        width: 40px;
+        height: 60px;
+        display: block; 
+        cursor: pointer;
+        /* VLOEIENDE TRANSITIE TOEGEVOEGD */
+        transition: opacity 0.3s ease-out;
+    }
+
+    .mouse-svg {
+        width: 100%;
+        height: 100%;
+        stroke: #333; /* Donkergrijs voor zichtbaarheid */
+        stroke-width: 2; 
+        fill: none; 
+    }
+    
+    .scroll-bar {
+        fill: #333; /* Donkergrijs voor zichtbaarheid */
+        transform-origin: center top; 
+        animation: scroll-pulse 2s infinite cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .scrolled .mouse-scroll-indicator {
+        opacity: 0; 
+        pointer-events: none;
+    }
+
+    @keyframes scroll-pulse {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.3;
+        }
+        100% {
+            transform: translateY(15px); 
+            opacity: 0;
+        }
+    }
+    /* EINDE MUIS SCROLL INDICATOR STIJLEN */
+
+
+  </style>
+  </head>
+
+<body class="Home">
+
+  <header>
+    <nav class="navigatie">
+        <ul>
+            <li><a href="index.html">Projecten</a></li>
+            <li><a href="pages/aboutme.html">About me</a></li>
+            <li><a href="pages/contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="introductie">
+        
+        <section class="welcome-text-container">
+        </section>
+
+        <div class="tao-animation-wrapper">
+
+            <div class="tao-column column-standard">
+              <svg class="letter-svg T-1" viewBox="0 0 100 100">
+                <g class="letter-group T"><path d="M 20 20 L 80 20 L 80 35 L 58 35 L 58 80 L 42 80 L 42 35 L 20 35 Z" /></g>
+              </svg>
+              <svg class="letter-svg A-1" viewBox="0 0 100 100">
+                <g class="letter-group A"><path d="M 40 20 L 60 20 L 85 80 L 65 80 L 50 40 L 35 80 L 15 80 Z" /></g>
+              </svg>
+              <svg class="letter-svg O-1" viewBox="0 0 100 100">
+                <g class="letter-group O"><circle cx="50" cy="50" r="30" /><circle class="o-hole" cx="50" cy="50" r="15" /></g>
+              </svg>
+            </div>
+
+            <div class="tao-column column-rotated">
+                <svg class="letter-svg O-2" viewBox="0 0 100 100">
+                  <g class="letter-group O"><circle cx="50" cy="50" r="30" /><circle class="o-hole" cx="50" cy="50" r="15" /></g>
+                </svg>
+                <svg class="letter-svg A-2" viewBox="0 0 100 100">
+                  <g class="letter-group A"><path d="M 40 80 L 60 80 L 85 20 L 65 20 L 50 60 L 35 20 L 15 20 Z" /></g>
+                </svg>
+                <svg class="letter-svg T-2" viewBox="0 0 100 100">
+                  <g class="letter-group T"><path d="M 20 80 L 80 80 L 80 65 L 58 65 L 58 20 L 42 20 L 42 65 L 20 65 Z" /></g>
+                </svg>
+            </div>
+
+        </div>
+        <img src="images/prof-foto-tao.jpg" alt="afbeelding van mijzelf" class="prof">
+    </section>
+
+    <div class="container">
+  
+   <ul>
+
+    <li><section class="fade-in-on-scroll delay-0">
+        <h3>
+            Doen Wat Werkt Project
+        </h3>
+        <a href="pages/DWW.html">
+            <img src="images/Mockup Cards-4.jpg" alt="Mockups DWW kaart mobile app" class="af1">
+            <img src="images/Mockup Cards laptop-2.png" alt="Mockups DWW kaart mobile app" class="af2">
+          </a>
+    </section>
+    </li>
+
+    <li>
+        <section class="fade-in-on-scroll delay-1">
+            <h3>
+                Responsive Multi Device Design
+            </h3>
+            <a href="pages/mdd.html">
+                <img src="images/mdd-mockup-4.png" alt="Een responsive multi device design" class="af3">
+                <img src="images/mdd-mockup-laptop.png" alt="Een responsive multi device design" class="af4">
+              </a>
+        </section>
+    </li>
+    <li>
+        <section class="fade-in-on-scroll delay-3">
+            <h3>
+                Visual Interface Design
+            </h3>
+            <a href="pages/vid.html">
+                <img src="images/vid-mockup-laptop.jpg" alt="Prototypes motion design" class="pic1">
+                <img src="images/ux-mockup-4.jpg" alt="Prototypes motion design" class="pic2">
+              </a>
+        </section>
+    </li>
+    <li>
+        <section class="fade-in-on-scroll delay-2">
+            <h3>
+                UX in Motion
+            </h3>
+            <a href="pages/ux.html">
+                <img src="images/ux-mockup-laptop.jpg" alt="Prototypes motion design" class="pic1">
+                <img src="images/ux-mockup-4.jpg" alt="Prototypes motion design" class="pic2">
+              </a>
+        </section>
+    </li>
+    </ul>
+</div>
+</main>
+
+<Footer>
+</Footer>
+
+<!-- MUIS SCROLL INDICATOR -->
+<!-- Link naar de ID van de volgende sectie om direct naar beneden te springen -->
+<a href="#content" class="mouse-scroll-indicator">
+    <svg class="mouse-svg" viewBox="0 0 50 80" xmlns="http://www.w3.org/2000/svg">
+        <!-- De Buitenkant van de Muis (De Outline) -->
+        <rect x="10" y="10" width="30" height="50" rx="15" ry="15" />
+        
+        <!-- De Schuifbalk (Het bewegende element) -->
+        <rect class="scroll-bar" x="23.5" y="15" width="3" height="10" rx="1.5" ry="1.5" />
+    </svg>
+</a>
+<!-- EINDE MUIS SCROLL INDICATOR -->
+
+<script>
+    const lettersStandard = document.querySelectorAll('.column-standard .letter-svg');
+    const lettersRotated = document.querySelectorAll('.column-rotated .letter-svg');
+    const body = document.body;
+    
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      
+      // Voorkom delen door nul als er geen scrollruimte is
+      const scrollFraction = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      
+      const rotationY = scrollFraction * 720; 
+
+      // 1. Standaard kolom (alleen 3D rotatie)
+      lettersStandard.forEach(letter => {
+        letter.style.transform = `rotateY(${rotationY}deg)`; 
+      });
+
+      // 2. Gedraaide kolom (-90 graden start rotatie + 3D rotatie)
+      lettersRotated.forEach(letter => {
+        // combineert de CSS rotate(-90deg) met de dynamische rotateY(...)
+        letter.style.transform = `rotate(-90deg) rotateY(${rotationY}deg)`; 
+      });
+
+      // 3. Muis indicator verbergen (Nieuwe logica)
+// Voeg de 'scrolled' klasse toe als de gebruiker meer dan 50px heeft gescrolld
+if (scrollTop > 50) {
+  body.classList.add('scrolled');
+} else {
+  body.classList.remove('scrolled');
+}
+
+    });
+</script>
+<script src="script/script.js"></script>
+<script src="script/nav.js"></script>
+</body>
+</html>
